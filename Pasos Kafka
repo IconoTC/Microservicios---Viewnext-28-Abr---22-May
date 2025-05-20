@@ -1,0 +1,89 @@
+1.- Arrancar zookeeper:
+		en config/zookeeper.properties
+		# En windows: C:/Users/pepito/tmp/zookeeper
+		dataDir=/tmp/zookeeper #si es mac o linux es asi
+
+		desde la carpeta kafka ejecutar:
+		bin\windows\zookeeper-server-start.bat  config\zookeeper.properties
+		IMPORTANTE!!! no se cierra esa ventana
+
+2.- Arrancar un broker de Apache Kafka
+		en config/server.properties
+		# En windows: C:/Users/pepito/tmp/kafka-logs
+		log.dirs=/tmp/kafka-logs
+
+		una nueva ventana o pestaña:
+		desde la carpeta kafka ejecutar:
+		bin\windows\kafka-server-start.bat config\server.properties
+		IMPORTANTE!!! no se cierra esa ventana
+
+3.- Crear un topic sin replicacion y solo 1 particion
+		una nueva ventana o pestaña:
+		desde la carpeta kafka ejecutar:
+		bin\windows\kafka-topics.bat --create --topic viewnext-topic --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
+
+		En este caso si podeis cerrar la ventana
+
+4.- Listar los topics
+		bin\windows\kafka-topics.bat --list  --bootstrap-server localhost:9092
+
+5.- Detalle del topic
+		bin\windows\kafka-topics.bat --describe --bootstrap-server localhost:9092 --topic viewnext-topic
+
+6.- Creamos el productor para empezar a enviar mensajes
+		una nueva ventana o pestaña:
+		desde la carpeta kafka ejecutar:
+		bin\windows\kafka-console-producer.bat --topic viewnext-topic --bootstrap-server localhost:9092
+
+7.- Creamos el consumidor para empezar a recibir mensajes
+		una nueva ventana o pestaña:
+		desde la carpeta kafka ejecutar:
+		bin\windows\kafka-console-consumer.bat --topic viewnext-topic --from-beginning --bootstrap-server localhost:9092
+
+8.- Ahora queremos crear un cluster, como ya tenemos arrancado un broker de kafka vamos a crear y arrancar otros 2.
+		duplicamos config/server.properties a server1.properties y cambiamos las propiedades:
+			broker.id=1
+			listeners=PLAINTEXT://:9093     descomentar esta linea
+			log.dirs=/tmp/kafka-logs-1
+
+		duplicamos config/server.properties a server2.properties y cambiamos las propiedades:
+			broker.id=2
+			listeners=PLAINTEXT://:9094     descomentar esta linea
+			log.dirs=/tmp/kafka-logs-2
+
+		Levantamos estos nuevos brokers
+		una nueva ventana o pestaña:
+		desde la carpeta kafka ejecutar:
+		bin\windows\kafka-server-start.bat config\server1.properties
+		IMPORTANTE!!! no se cierra esa ventana
+
+		una nueva ventana o pestaña:
+		desde la carpeta kafka ejecutar:
+		bin\windows\kafka-server-start.bat config\server2.properties
+		IMPORTANTE!!! no se cierra esa ventana
+
+9.- Crear un topic con 2 particiones y factor de replicacion 3
+		una nueva ventana o pestaña:
+		desde la carpeta kafka ejecutar:
+		bin\windows\kafka-topics.bat --create --topic viewnext-cluster --bootstrap-server localhost:9092 --replication-factor 3 --partitions 2
+
+10.- Listar los topics
+		bin\windows\kafka-topics.bat --list  --bootstrap-server localhost:9092
+
+11.- Detalle del topic
+		bin\windows\kafka-topics.bat --describe --bootstrap-server localhost:9092 --topic viewnext-cluster
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
